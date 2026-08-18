@@ -8,7 +8,7 @@ The objective of this project is to examine whether various factors in the arbit
 The analysis proceeds in three stages: an initial model, a refined model, and investigation of the highest-gain features. A separate interpretive analysis links high-impact features to real-world entities to investigate whether the observed predictive signals reflect broader organizational or structural characteristics. 
 
 ### The Initial Model
-The initial model identified Provider Practice/Facility Size as the highest gain feature. However, subsequent SHAP and descriptive analyses showed that missing facility-size information was strongly associated with default decisions, in which a party does not show up to a negotiation and thus loses by default. This motivated a refined analysis that explicitly excluded these default disputes.
+The initial model identified provider Practice/Facility Size as the highest gain feature. However, subsequent SHAP and descriptive analyses showed that missing facility-size information was strongly associated with default decisions, in which a party does not show up to a negotiation and thus loses by default. This motivated a refined analysis that explicitly excluded these default disputes.
 
 ### The Refined Model and an Unexpected Outcome
 In the refined model, Provider Email Domain emerged as a dominant predictor. Further analysis of the data found substantial differences in both model contribution and observed outcomes across provider email domains. Examination of the organizations associated with high-impact domains suggests that the feature may function as a proxy for organizational identity or dispute management styles.
