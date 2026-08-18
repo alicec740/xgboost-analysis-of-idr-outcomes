@@ -131,9 +131,9 @@ The strong relationship between missing Practice/Facility Size and default decis
 
 Feature importance and SHAP values describe how the model uses available predictors, but they do not establish that a feature is substantively important to the underlying arbitration process. A feature can be highly predictive because it acts as a proxy for other unmeasured characteristics.
 
-### - Scope of the data
+### - The data is limited in scope.
 
 This analysis is based on the 2024 Federal IDR Public Use Files and therefore reflects disputes represented in that reporting period. Patterns observed in these data may not generalize to other periods, changes in the IDR process, or disputes outside the Federal IDR system.
 
-### -  Further investigation
+##  Further investigation
 Future analysis could incorporate additional organizational and dispute-level variables to determine which underlying characteristics are responsible for the predictive signals associated with provider email domains. 
