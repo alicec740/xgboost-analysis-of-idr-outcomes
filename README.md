@@ -91,13 +91,13 @@ This interpretation remains an association rather than a causal finding. The ana
 
 ## Data & Methodology
 
-#### Data
+### Data
 The analysis uses the publicly available 2024 data on the Independent Dispute Resolution (IDR) process from the Centers for Medicare and Medicaid Services (CMS). The dataset contains information about disputes submitted through the IDR process, including provider, insurer, and arbiter characteristics, as well as dispute characteristics. The analysis combines four quarterly public use files covering Q1 through Q4 of 2024 and contains about 1.2 million observations. Variables were cleaned, standardized, and filtered to construct the modeling dataset. 
 
-#### Target
+### Target
 The target variable represents the selected arbitration outcome: whether the outcome was in favor of the plan/issuer or the provider/facility. The target was encoded as a binary variable, with 0 representing plan/issuer outcomes and 1 representing provider/facility outcomes.
 
-#### Feature Engineering and Preprocessing
+### Feature Engineering and Preprocessing
 
 Variables directly related to the target outcome were excluded from the predictor dataset. Identifier and descriptive fields that were not appropriate as model predictors were also removed. Categorical variables were retained using XGBoost's categorical feature support, while numeric fields were converted to appropriate numeric types.
 
@@ -108,10 +108,10 @@ Variables directly related to the target outcome were excluded from the predicto
 | Refined model — 4-fold CV SD	  | 0.0015 |
 | Refined model — held-out test	  | 0.8818 |
 
-#### Model
+### Model
 The analysis uses XGBoost, a gradient-boosted decision-tree model, with a binary logistic objective. The model was configured with a maximum tree depth of 6, a learning rate of 0.3, and 175 boosting rounds. For more information on the model, please see `refined_idr_model.py`.
 
-#### Evaluation
+### Evaluation
 The data were divided into training and held-out test sets using a 67/33 split. The refined analysis additionally used four-fold stratified cross-validation within the training data to assess performance consistency across different subsets of the data. Model performance was evaluated using AUC.
 
 ## Limitations
