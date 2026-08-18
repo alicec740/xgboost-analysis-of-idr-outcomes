@@ -1,31 +1,139 @@
 # XGBoost Analysis of No Surprises Act IDR Outcomes
-An XGBoost model identified unexpected predictors of No Surprises Act arbitration outcomes. Model interpretation revealed that Practice/Facility Size was strongly associated with default decisions, motivating a refined analysis that excluded defaults. The refined model revealed Provider Email Domain as a dominant predictor, which further investigation suggested may proxy for organizational identity or dispute-management structure.
-
-This project uses XGBoost to examine patterns associated with arbitration outcomes in the federal Independent Dispute Resolution (IDR) process established under the No Surprises Act. Rather than treating model performance as the endpoint, the analysis uses feature importance, SHAP values, descriptive analysis, and cross-validation to investigate unexpected predictive signals and their substantive meaning.
-
-The analysis proceeds in two stages. The initial model identifies Practice/Facility Size as the strongest feature. Further investigation shows that missing facility-size information is strongly associated with default decisions, motivating a refined analysis that excludes default disputes. In the refined model, Provider Email Domain emerges as the strongest feature. Additional analysis shows substantial differences in outcomes across provider email domains and suggests that the feature may act as a proxy for organizational identity or dispute-management structure.
-
-
-### Key findings
-
-- Practice/Facility Size was the highest-gain feature in the initial model.
-- 99.32% of disputes with unknown Practice/Facility Size were default decisions.
-- After excluding default decisions, Practice/Facility Size fell substantially in feature importance.
-- Provider Email Domain became the highest-gain feature in the refined model.
-- Domain-level SHAP effects corresponded to substantial differences in observed arbitration outcomes.
-- These domain-level effects remained directionally consistent across four validation folds.
-- The results suggest that provider email domains may encode organizational or dispute-management characteristics not directly represented by other model features.
+## Project Background
+The No Surprises Act was implemented in 2022 to protect patients with private health insurance from unexpected medical bills coming from emergency services or unanticipated services by out-of-network healthcare providers (e.g. hospitals and physicians). This law requires that healthcare providers and health insurers negotiate on payment for the service, and if no agreement is reached, initiate third-party arbitration called the Independent Dispute Resolution (IDR) process. While existing studies analyze the outcomes of these disputes, none have utilized machine learning to understand the patterns that may exist within this process.
 
 ## Project Overview
+The objective of this project is to examine whether various factors in the arbitration process are associated with either provider or insurer wins in the Independent Dispute Resolution (IDR) process established under the No Surprises Act. This project uses an XGBoost binary classifier to examine patterns associated with these arbitration outcomes. Rather than treating model performance as the endpoint, the analysis uses feature importance, SHAP values, descriptive analysis, and cross-validation to investigate unexpected predictive signals and interpret their substantive implications.
+
+The analysis proceeds in three stages: an initial model, a refined model, and investigation of the highest-gain features. A separate interpretive analysis links high-impact features to real-world entities to investigate whether the observed predictive signals reflect broader organizational or structural characteristics. 
+
+### The Initial Model
+The initial model identified Provider Practice/Facility Size as the highest gain feature. However, subsequent SHAP and descriptive analyses showed that missing facility-size information was strongly associated with default decisions, in which a party does not show up to a negotiation and thus loses by default. This motivated a refined analysis that explicitly excluded these default disputes.
+
+### The Refined Model and an Unexpected Outcome
+In the refined model, Provider Email Domain emerged as a dominant predictor. Further analysis of the data found substantial differences in both model contribution and observed outcomes across provider email domains. Examination of the organizations associated with high-impact domains suggests that the feature may function as a proxy for organizational identity or dispute management styles.
 
 ## Analytical Approach
 
+The analysis combines gradient-boosted decision trees with model interpretation and descriptive analysis. XGBoost was used to model arbitration outcomes, while gain based feature importance and SHAP values were used to identify and investigate influential predictors. Descriptive outcome comparisons were then used to examine whether model-derived patterns were reflected in the observed data. Model refinement was evaluated using a held-out test set and a four-fold cross-validation to assess stability of the signal. 
+
+The final interpretive analysis examined high-impact features at the organizational level to assess whether their predictive signal could be associated with broader organizational or structural characteristics.
+### Summary of Analytic Workflow
+```mermaid
+flowchart TB
+    A("Initial XGBoost Model")
+    B("Feature Importance")
+    C("SHAP Analysis")
+    D("Descriptive Outcome <br>Analysis")
+    E("Model Refinement")
+    F("Cross-Validation, <br>Model Evaluation")
+    G{{"Organizational <br>Interpretation "}}
+    A --> B --> C --> D --> E --> F --> G
+    %% Modeling
+    classDef modeling fill:#D9EAF7,stroke:#4F81BD,color:#1F2937,stroke-width:2px;
+    class A,E modeling;
+    %% Model interpretation
+    classDef interpretation fill:#E8DDF5,stroke:#8064A2,color:#1F2937,stroke-width:2px;
+    class B,C interpretation;
+    %% Outcome / evaluation
+    classDef evaluation fill:#DDEEDB,stroke:#70AD47,color:#1F2937,stroke-width:2px;
+    class D,F evaluation;
+    %% Organizational interpretation
+    classDef organizational fill:#FCE4D6,stroke:#ED7D31,color:#1F2937,stroke-width:2px;
+    class G organizational;
+    %% Connector styling
+    linkStyle default stroke:#7F8C8D,stroke-width:2px;
+```
 ## Key Findings
+### 1. The initial model identified Practice/Facility Size as the strongest predictor.
+
+The initial XGBoost model identified Practice/Facility Size as the highest-gain feature, substantially exceeding the next most important predictor. This prompted further investigation using SHAP values and descriptive analysis, rather than treating feature importance as an endpoint.
+
+### 2. Missing Practice/Facility Size was strongly associated with default decisions in favor of insurers.
+
+Among disputes with an unknown Practice/Facility Size, a vast majority (99.32%) were default decisions, compared to the default rates of about 20% among disputes with reported facility-sizes. These default disputes with unknown facility size were also overwhelmingly decided in favor of the insurer (97.99%). Together, these patterns suggest that unknown Practice/Facility Size may be capturing disputes in which the provider or facility is not participating in the dispute, thus resulting in a default decision.
+
+### 3. Removing default decisions substantially changed the model's feature structure.
+
+After excluding default decisions, Practice/Facility Size fell from the highest gain feature to fourteenth, while Provider Email Domain went from the second to the highest gain feature. The refined model achieved a held-out test AUC of 0.8818, compared to approximately 0.91 for the initial model. The model's mean four-fold cross-validation AUC was 0.8746 with SD = 0.0015, suggesting that the model is quite stable.
+
+### 4. Provider Email Domain captured substantial differences in arbitration outcomes.
+
+Provider Email Domain showed substantial variation in signed SHAP contributions across domains. Among email domains with at least 10,000 observations, domains with negative mean SHAP values generally had lower provider/facility outcome rates, while domains with positive mean SHAP values generally had higher provider/facility outcome rates. For example, `totalcare.us` had a mean SHAP value of −1.29 and a provider/facility outcome rate of 62.72%, while `mbbrm.com` had a mean SHAP value of +0.81 and a provider/facility outcome rate of 98.39%.
+
+#### Select Examples of Provider Email Domains, Mean SHAP Values, and Observed Win Rates
+| Provider Email Domain | Mean SHAP Value | Observations | Provider/Facility Win Rate |
+| --------------------- | --------------: | -----------: | -------------------------: |
+| `totalcare.us`        |          -1.288 |       34,960 |                     62.72% |
+| `envisionhealth.com`  |          -0.644 |       40,608 |                     68.81% 
+| `specialtycare.net`   |          -0.276 |       18,985 |                     85.79% |
+| `radpmg.com`          |          +0.531 |       22,242 |                     91.40% |
+| `saparm.com`          |          +0.597 |      181,054 |                     92.08% |
+| `teamhealth.com`      |          +0.605 |      137,434 |                     90.55% |
+| `scphealth.com`       |          +0.644 |       10,363 |                     89.92% |
+| `mbbrm.com`           |          +0.806 |       22,454 |                     98.39% |
+
+
+**Note:** Table includes provider email domains with at least 10,000 observations. Mean SHAP values represent the average contribution of each domain to the model's prediction, while the provider/facility win rate represents the observed percentage of non-default disputes decided in favor of the provider/facility.
+
+### 5. The provider email domain signal was stable across validation folds.
+
+The direction of the Provider Email Domain effects remained consistent across four validation folds. For example, `envisionhealth.com` had negative mean SHAP values in every fold, while `saparm.com` and `teamhealth.com` had positive values in every fold. This consistency suggests that the domain-level signal was not driven by a single subset of the training data.
+
+## Interpretation of Results
+The strongest predictive features identified by the models appear to capture characteristics of the organizations and processes surrounding IDR disputes, rather than individual characteristics of certain disputes.
+
+The relationship between Practice/Facility Size and default decisions suggests that missing facility information may have served as a proxy for the default decision in the initial model. After default decisions were excluded, Provider Email Domain emerged as the dominant feature.
+
+Provider Email Domain is not itself a substantive characteristic of an arbitration dispute. Rather, it identifies the organizational affiliation of a provider. The consistency of the domain effects across validation folds, combined with the observed differences in arbitration win rates, suggests that the feature may be capturing broader organizational or dispute management characteristics.
+
+This interpretation remains an association rather than a causal finding. The analysis does not establish that an organization's identity or representation practices cause a particular arbitration outcome. Instead, it demonstrates how model interpretation can reveal potentially meaningful structural patterns that may not be apparent from conventional data analysis alone.
 
 ## Data & Methodology
 
+#### Data
+The analysis uses the publicly available 2024 data on the Independent Dispute Resolution (IDR) process from the Centers for Medicare and Medicaid Services (CMS). The dataset contains information about disputes submitted through the IDR process, including provider, insurer, and arbiter characteristics, as well as dispute characteristics. The analysis combines four quarterly public use files covering Q1 through Q4 of 2024 and contains about 1.2 million observations. Variables were cleaned, standardized, and filtered to construct the modeling dataset. 
+
+#### Target
+The target variable represents the selected arbitration outcome: whether the outcome was in favor of the plan/issuer or the provider/facility. The target was encoded as a binary variable, with 0 representing plan/issuer outcomes and 1 representing provider/facility outcomes.
+
+#### Feature Engineering and Preprocessing
+
+Variables directly related to the target outcome were excluded from the predictor dataset. Identifier and descriptive fields that were not appropriate as model predictors were also removed. Categorical variables were retained using XGBoost's categorical feature support, while numeric fields were converted to appropriate numeric types.
+
+| Evaluation | AUC |
+|---|---:|
+| Initial model — held-out test	  | ~0.91  |
+| Refined model — 4-fold CV mean	| 0.8746 |
+| Refined model — 4-fold CV SD	  | 0.0015 |
+| Refined model — held-out test	  | 0.8818 |
+
+#### Model
+The analysis uses XGBoost, a gradient-boosted decision-tree model, with a binary logistic objective. The model was configured with a maximum tree depth of 6, a learning rate of 0.3, and 175 boosting rounds. For more information on the model, please see `refined_idr_model.py`.
+
+#### Evaluation
+The data were divided into training and held-out test sets using a 67/33 split. The refined analysis additionally used four-fold stratified cross-validation within the training data to assess performance consistency across different subsets of the data. Model performance was evaluated using AUC.
+
 ## Limitations
+### - Observational data limits causal interpretation.
 
+The analysis identifies associations between available dispute characteristics and arbitration outcomes, but does not establish causal relationships. For instance, the observed relationships between provider email domains and arbitration outcomes should not be interpreted as evidence that organizational identity or representation practices cause particular outcomes.
 
+### - Provider Email Domain may capture one or many unobserved organizational characteristics.
 
+Provider Email Domain may contain information about organizational identity, representation, specialty, or dispute-management practices that are not explicitly represented elsewhere in the dataset. While the stability of domain-level effects across validation folds supports the predictive signal, additional data would be required to determine which underlying organizational characteristics account for the observed differences.
 
+### - Missing data may contain important information.
+
+The strong relationship between missing Practice/Facility Size and default decisions illustrates a broader limitation of the analysis. Specifically, missing values may reflect characteristics of how disputes enter or proceed through the IDR process, rather than simple random error. For future analyses, treating a missing value as a feature may allow the model to capture process-related signals that are difficult to interpret substantively.
+
+### - Model performance does not establish substantive importance.
+
+Feature importance and SHAP values describe how the model uses available predictors, but they do not establish that a feature is substantively important to the underlying arbitration process. A feature can be highly predictive because it acts as a proxy for other unmeasured characteristics.
+
+### - Scope of the data
+
+This analysis is based on the 2024 Federal IDR Public Use Files and therefore reflects disputes represented in that reporting period. Patterns observed in these data may not generalize to other periods, changes in the IDR process, or disputes outside the Federal IDR system.
+
+### -  Further investigation
+Future analysis could incorporate additional organizational and dispute-level variables to determine which underlying characteristics are responsible for the predictive signals associated with provider email domains. 
