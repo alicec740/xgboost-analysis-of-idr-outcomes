@@ -92,7 +92,8 @@ This interpretation remains an association rather than a causal finding. The ana
 ## Data & Methodology
 
 ### Data
-The analysis uses the publicly available 2024 data on the Independent Dispute Resolution (IDR) process from the Centers for Medicare and Medicaid Services (CMS). The dataset contains information about disputes submitted through the IDR process, including provider, insurer, and arbiter characteristics, as well as dispute characteristics. The analysis combines four quarterly public use files covering Q1 through Q4 of 2024 and contains about 1.2 million observations. Variables were cleaned, standardized, and filtered to construct the modeling dataset. 
+The analysis uses the publicly available 2024 data on the Independent Dispute Resolution (IDR) process from the Centers for Medicare and Medicaid Services (CMS). Data can be found [here.](https://www.cms.gov/nosurprises/policies-and-resources/reports)
+The dataset contains information about disputes submitted through the IDR process, including provider, insurer, and arbiter characteristics, as well as dispute characteristics. The analysis combines four quarterly public use files covering Q1 through Q4 of 2024 and contains about 1.2 million observations. Variables were cleaned, standardized, and filtered to construct the modeling dataset. 
 
 ### Target
 The target variable represents the selected arbitration outcome: whether the outcome was in favor of the plan/issuer or the provider/facility. The target was encoded as a binary variable, with 0 representing plan/issuer outcomes and 1 representing provider/facility outcomes.
