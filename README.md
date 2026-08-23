@@ -101,6 +101,13 @@ The target variable represents the selected arbitration outcome: whether the out
 ### Feature Engineering and Preprocessing
 
 Variables directly related to the target outcome were excluded from the predictor dataset. Identifier and descriptive fields that were not appropriate as model predictors were also removed. Categorical variables were retained using XGBoost's categorical feature support, while numeric fields were converted to appropriate numeric types.
+
+### Model
+The analysis uses XGBoost, a gradient-boosted decision-tree model, with a binary logistic objective. The model was configured with a maximum tree depth of 6, a learning rate of 0.3, and 175 boosting rounds. For more information on the model, please see `refined_idr_model.py`.
+
+### Evaluation
+The data were divided into training and held-out test sets using a 67/33 split. The refined analysis additionally used four-fold stratified cross-validation within the training data to assess performance consistency across different subsets of the data. Model performance was evaluated using ROC AUC and precision-recall AUC (PR AUC). ROC AUC was used to assess overall ranking performance, while PR AUC was used to examine performance for the individual outcome classes, particularly the less-common plan/issuer outcome.
+
 | Evaluation                    | Metric                   |     Result |
 | ----------------------------- | ------------------------ | ---------: |
 | Refined model —  test | ROC AUC                  | **0.8818** |
@@ -108,12 +115,6 @@ Variables directly related to the target outcome were excluded from the predicto
 | Refined model —  test | Plan/issuer PR AUC       | **0.6340** |
 | Refined model — 4-fold CV     | ROC AUC, mean            | **0.8746** |
 | Refined model — 4-fold CV     | ROC AUC, SD              | **0.0015** |
-
-### Model
-The analysis uses XGBoost, a gradient-boosted decision-tree model, with a binary logistic objective. The model was configured with a maximum tree depth of 6, a learning rate of 0.3, and 175 boosting rounds. For more information on the model, please see `refined_idr_model.py`.
-
-### Evaluation
-The data were divided into training and held-out test sets using a 67/33 split. The refined analysis additionally used four-fold stratified cross-validation within the training data to assess performance consistency across different subsets of the data. Model performance was evaluated using ROC AUC and precision-recall AUC (PR AUC). ROC AUC was used to assess overall ranking performance, while PR AUC was used to examine performance for the individual outcome classes, particularly the less-common plan/issuer outcome.
 
 ## Limitations
 ### - Observational data limits causal interpretation.
