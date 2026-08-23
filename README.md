@@ -15,7 +15,7 @@ In the refined model, Provider Email Domain emerged as a dominant predictor. Fur
 
 ## Analytical Approach
 
-The analysis combines gradient-boosted decision trees with model interpretation and descriptive analysis. XGBoost was used to model arbitration outcomes, while gain based feature importance and SHAP values were used to identify and investigate influential predictors. Descriptive outcome comparisons were then used to examine whether model-derived patterns were reflected in the observed data. Model refinement was evaluated using a held-out test set and a stratified four-fold cross-validation to assess stability of the signal. 
+The analysis combines gradient-boosted decision trees with model interpretation and descriptive analysis. XGBoost was used to model arbitration outcomes, while gain based feature importance and SHAP values were used to identify and investigate influential predictors. Descriptive outcome comparisons were then used to examine whether model-derived patterns were reflected in the observed data. Model refinement was evaluated using a test set and a stratified four-fold cross-validation to assess stability of the signal, since there was class imbalance of about 85-15. 
 
 The final interpretive analysis examined high-impact features at the organizational level to assess whether their predictive signal could be associated with broader organizational or structural characteristics.
 ### Summary of Analytic Workflow
