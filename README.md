@@ -1,4 +1,4 @@
-# XGBoost Analysis of No Surprises Act IDR Outcomes
+# XGBoost Analysis of No Surprises Act Negotiation Outcome
 ## Project Background
 The No Surprises Act was implemented in 2022 to protect patients with private health insurance from unexpected medical bills coming from emergency services or unanticipated services by out-of-network healthcare providers (e.g. hospitals and physicians). This law requires that healthcare providers and health insurers negotiate on payment for the service, and if no agreement is reached, initiate third-party arbitration called the Independent Dispute Resolution (IDR) process. While existing studies analyze the outcomes of these disputes, none have utilized machine learning to understand the patterns that may exist within this process.
 
