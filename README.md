@@ -1,5 +1,5 @@
 # XGBoost Analysis of No Surprises Act Dispute Outcomes
-## Health insurers are paying more than 18 times the median price for some healthcare services.
+## Health insurers are sometimes paying healthcare providers _more than 18 times_ the median price for emergency medical services.
 Let's say you go to the hospital for an emergency, and you are treated by an out-of-network doctor, meaning that your insurance doesn't cover their services. Thanks to the No Surprises Act, your insurance company will cover the "surprise" cost, but they will have to negotiate a price for that service with that provider. If they can't agree on a price, they will initiate a dispute process. 
 
 According to the Congressional Research Service, these disputes have heavily favored healthcare providers, with providers winning vast majority of disputes and sometimes **_charging insurers more than 18 times the median price_** of that service. This is cause for concern, especially since higher costs to insurance companies can lead to health insurance becoming more expensive for all patients. Currently, policy research has focused on win rates and types of services, but none have investigated the outcomes of these disputes using machine learning. To further understand these No Surprises Act disputes, I have used XGBoost to help uncover patterns and inform research on this dispute process.
